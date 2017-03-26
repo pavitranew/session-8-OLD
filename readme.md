@@ -1,22 +1,17 @@
 # Session Eight
 
-##ES6 Modules
+## ES6 Modules
 
-npm init
-
-```
-$ npm install --save lodash
-```
+http://exploringjs.com/es6/
 
 app.js:
 
-```
+```js
 const ages = [1,1,4,5,6,6,7];
-
 console.log(uniq(ages))
 ```
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,13 +25,17 @@ console.log(uniq(ages))
 </html>
 ```
 
+$ npm init
+
+```
+$ npm install --save lodash
+```
+
 Import the required functionality from lodash:
 
 ```
 import {uniq} from 'lodash';
-
 const ages = [1,1,4,5,6,6,7];
-
 console.log(uniq(ages))
 ```
 
@@ -46,20 +45,22 @@ Remove lodash
 <!-- <script src="https://unpkg.com/lodash@4.16.6"></script> -->
 ```
 
-Unexpected token import
+"Unexpected token import"
+
+Require is part of Node: `const lodash = require('lodash');`
 
 
-## Tooling - Webpack
+## Enter Webpack
 
 ```
-$ npm install webpack
+$ npm install webpack --save-dev
 ```
 
 app.js:
 
 ```
 function component () {
-  var element = document.createElement('div');
+  const element = document.createElement('div');
 
   /* lodash is required for the next line to work */
   element.innerHTML = _.join(['Hello','webpack'], ' ');
@@ -92,7 +93,7 @@ Remove and add to index:
 ```
 
 ```
-./node_modules/.bin/webpack app.js dist/bundle.js
+$ ./node_modules/.bin/webpack app.js dist/bundle.js
 ```
 
 Additional example:
@@ -131,7 +132,6 @@ alt
 
 ```
 module.exports = {
-	devtool: 'source-map',
   entry: {
     filename: './app.js'
   },
@@ -145,7 +145,7 @@ module.exports = {
 If a config file is present webpack picks it up automatically:
 
 ```
-./node_modules/.bin/webpack 
+$ ./node_modules/.bin/webpack 
 ```
 
 npm run webpack with a --watch flag:
@@ -161,16 +161,24 @@ npm run webpack with a --watch flag:
 ```
 
 ```
+console.log(uniq(ages))
+```
+
+```
 devtool: 'source-map',
 ```
+
+## Babel
 
 ```
 $ npm install babel-loader babel-core --save-dev
 ```
 
 ```
-$ npm install babel-preset-es2015-native-modules --save-dev
+$ npm install babel-preset-latest --save-dev
 ```
+
+https://babeljs.io/docs/plugins/preset-latest/
 
 
 ```
@@ -189,6 +197,8 @@ module: {
 	]
 }
 ```
+
+## Size Matters
 
 Add
 
@@ -265,7 +275,10 @@ npm install style-loader css-loader --save-dev
 ```
 loaders: [
 ...
-    { test: /\.css$/, loader: "style-loader!css-loader" }
+    {
+      test: /\.css$/, 
+      loader: "style-loader!css-loader" 
+    }
 ]
 ```
 
@@ -286,7 +299,19 @@ Note that styles are added to the page
 http://stackoverflow.com/questions/35369419/how-to-use-images-in-css-with-webpack
 
 ```
-npm install url-loader --save-dev
+.ages {
+  padding: 1rem;
+  background-color: #eee;
+  background-image: url(bg.gif);
+}
+```
+
+```
+$ npm install url-loader --save-dev
+```
+
+```
+$ npm install file-loader --save-dev
 ```
 
 ```
@@ -297,6 +322,160 @@ npm install url-loader --save-dev
 ```
 
 Note the base-64 encoded image
+
+https://www.youtube.com/watch?v=WQue1AN93YU
+
+##Importing Exporting
+
+src/config.js
+
+1. Default export:
+
+```
+const apiKey = 'abcdef'
+export default apiKey
+```
+
+import apiKey from './src/config'
+console.log(apiKey)
+
+Try:
+
+import foobar from './src/config'
+
+A default export gets renamed to whatever you import it as. A module  can have only one default export.
+
+2. Named exports
+
+Try:
+
+export const apiKey = 'abcdef'
+
+a. Change import:
+
+import {apiKey} from './src/config'
+
+b. Multiple imports:
+
+export const url = 'http://deverell.com'
+
+import {apiKey, url} from './src/config'
+console.log(apiKey, url)
+
+c. Functions:
+
+export function sayHi(name){
+  console.log( `Hello there ${name}.` )
+}
+
+import {apiKey, url, sayHi} from './src/config'
+sayHi(Daniel
+
+d. Multiple exports:
+
+const a = 10
+const b = 30
+export {a, b}
+
+e. Import/export as:
+
+import {apiKey as key, url, sayHi} from './src/config'
+export {a as age, b}
+
+## Exercise
+
+src/user.js
+
+```
+function user(name, email, website){
+  return {
+    name: name,
+    email: email,
+    website: website
+  }
+}
+```
+
+
+
+
+
+## SystemJS
+
+```
+{
+  "name": "systemjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "browser-sync start --directory --server  --files '*.js, *.html, *.css'"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.13.0"
+  }
+}
+```
+
+
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>System JS</title>
+</head>
+<body>
+  <script src="https://jspm.io/system@0.19.js"></script>
+  <script>
+
+  </script>
+</body>
+</html>
+
+```
+
+
+```
+import { sum, kebabCase } from 'npm:lodash';
+import { addTax } from './checkout';
+
+console.log(kebabCase('This is kebab case'));
+
+console.log(addTax(100, 0.15));
+```
+
+
+```
+export function addTax(amount, taxRate) {
+  return amount + (amount * taxRate);
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
