@@ -2,6 +2,10 @@
 
 ## ES6 Modules
 
+Why Modules??
+
+http://wesbos.com/javascript-modules/
+
 http://exploringjs.com/es6/
 
 app.js:
@@ -180,6 +184,8 @@ $ npm install babel-preset-latest --save-dev
 
 https://babeljs.io/docs/plugins/preset-latest/
 
+Loaders are small plugins that basically say “When you encounter this kind of file, do this with it”.
+
 
 ```
 module: {
@@ -198,6 +204,23 @@ module: {
 }
 ```
 
+N.B. We can also include `include: __dirname + '/src',`
+
+Test? https://css-tricks.com/css-modules-part-2-getting-started/
+
+```
+const greetings = (text, person) => {
+  return `${text}, ${person}. I read you but I’m sorry, I’m afraid I can’t do that.`;
+}
+
+export default greetings;
+```
+
+```
+import greetings from './robot.js'
+document.write(greetings("Affirmative", "Dave"));
+```
+
 ## Size Matters
 
 Add
@@ -205,6 +228,10 @@ Add
 ```
 const webpack = require('webpack');
 ```
+
+require is CommonJS. CommonJS is a project with the goal of specifying an ecosystem for JavaScript outside the browser (for example, on the server or for native desktop applications) like NodeJS. 
+
+https://webpack.github.io/docs/commonjs.html
 
 ```
 plugins: [
@@ -288,11 +315,15 @@ In app.js
 require('./styles.css');
 ```
 
+N.B. We just made a stylesheet a dependency of a JavaScript file!
+
 Note that styles are added to the page
 
 ```
 <!-- <link rel="stylesheet" href="styles.css"> -->
 ```
+
+We made a JavaScript file that requested another CSS file and that code was then embedded within a web page. So in a more realistic example we could create a buttons.js file and make buttons.css a dependency of it, and then import that JavaScript into another file that organises our templates and spits out some HTML. 
 
 ## Images
 
@@ -382,7 +413,8 @@ e. Import/export as:
 import {apiKey as key, url, sayHi} from './src/config'
 export {a as age, b}
 
-## Exercise
+
+## Exercise ES6 Modules
 
 src/user.js
 
