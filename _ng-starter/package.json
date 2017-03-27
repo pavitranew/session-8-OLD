@@ -12,7 +12,7 @@
         "typings": "typings",
         "postinstall": "typings install"
     },
-    "license": "ISC",
+    "license": "",
     "dependencies": {
         "@angular/common": "2.0.0",
         "@angular/compiler": "2.0.0",

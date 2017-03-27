@@ -1,18 +1,19 @@
 # Session Eight
 
+## Homework
+
+## Reading
+
+* [Wes Bos](http://wesbos.com/javascript-modules/) on ES6 Modules
+* http://exploringjs.com/es6/
+
 ## ES6 Modules
-
-Why Modules??
-
-http://wesbos.com/javascript-modules/
-
-http://exploringjs.com/es6/
 
 app.js:
 
 ```js
 const ages = [1,1,4,5,6,6,7];
-console.log(uniq(ages))
+console.log(_.uniq(ages))
 ```
 
 ```html
@@ -29,7 +30,11 @@ console.log(uniq(ages))
 </html>
 ```
 
-$ npm init
+We want to use lodash via the node_modules directory.
+
+```
+$ npm init -y
+```
 
 ```
 $ npm install --save lodash
@@ -51,10 +56,26 @@ Remove lodash
 
 "Unexpected token import"
 
-Require is part of Node: `const lodash = require('lodash');`
+Cannot use require. Require is part of Node: `const lodash = require('lodash');`
+
+require is CommonJS. CommonJS is a project with the goal of specifying an ecosystem for JavaScript outside the browser (for example, on the server or for native desktop applications) like NodeJS. 
+
+https://webpack.github.io/docs/commonjs.html
+
+## Grunt and Gulp
+
+Task runners that perform many functions such as starting a server, SASS compiling, minification, concatenation.
+
+See a sample from a previous semester - `gulp`
+
+We have been using npm scripts for this so far.
+
+[Pros and cons of this approach](https://gist.github.com/elijahmanor/179e47828bf760c218bb3820d929836d)
 
 
-## Enter Webpack
+## Webpack
+
+Performs the same functions of gulp/grunt but with important differences. See [this video](https://www.youtube.com/watch?v=WQue1AN93YU)
 
 ```
 $ npm install webpack --save-dev
@@ -62,7 +83,7 @@ $ npm install webpack --save-dev
 
 app.js:
 
-```
+```js
 function component () {
   const element = document.createElement('div');
 
@@ -75,13 +96,13 @@ function component () {
 document.body.appendChild(component());
 ```
 
-```
+```js
 import _ from 'lodash';
 ```
 
 Remove and add to index:
 
-```
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +117,7 @@ Remove and add to index:
 </html>
 ```
 
-```
+```sh
 $ ./node_modules/.bin/webpack app.js dist/bundle.js
 ```
 
@@ -118,7 +139,11 @@ function component () {
 document.body.appendChild(component());
 ```
 
-webpack.config.js:
+Re-run webpack at prompt.
+
+Note the import of a single piece of functionality.
+
+Create `webpack.config.js`:
 
 ```
 var path = require('path');
@@ -164,13 +189,31 @@ npm run webpack with a --watch flag:
 }
 ```
 
+Run it with a -p flag
+
+```
+"scripts": {
+  "build": "webpack -p --watch"
+},
+```
+
+app.js:
+
 ```
 console.log(uniq(ages))
 ```
 
+Note the line number (1) in the minified file.
+
+Add source mapping:
+
 ```
 devtool: 'source-map',
 ```
+
+Note the new line number.
+
+We now have the ability to import code from our node_modules - similar to using require in the commonjs-based node environment.
 
 ## Babel
 
@@ -206,7 +249,17 @@ module: {
 
 N.B. We can also include `include: __dirname + '/src',`
 
-Test? https://css-tricks.com/css-modules-part-2-getting-started/
+Alternative:
+
+```
+{
+  test: /\.js/,
+  loader: 'babel',
+  include: __dirname + '/src',
+},
+```
+
+Test
 
 ```
 const greetings = (text, person) => {
@@ -218,59 +271,15 @@ export default greetings;
 
 ```
 import greetings from './robot.js'
-document.write(greetings("Affirmative", "Dave"));
+...
+function component(){
+  ...
+  document.write(greetings("Affirmative", "Dave"));
 ```
 
-## Size Matters
+To view the Babelized JavaScript remove the -p flag, recompile, open bundle.js and search for `greetings`. 
 
-Add
-
-```
-const webpack = require('webpack');
-```
-
-require is CommonJS. CommonJS is a project with the goal of specifying an ecosystem for JavaScript outside the browser (for example, on the server or for native desktop applications) like NodeJS. 
-
-https://webpack.github.io/docs/commonjs.html
-
-```
-plugins: [
-	new webpack.optimize.UglifyJsPlugin()
-]
-```
-
-Other plugins from webpack: https://webpack.js.org/plugins/
-
-Add a console.log to app.js
-
-```
-import { uniq } from 'lodash'
-
-function component () {
-  const element = document.createElement('div');
-
-  const ages = [1,1,4,5,6,6,7] 
-  element.innerHTML = (uniq(ages));
-
-  console.log(uniq(ages))
-
-  return element;
-}
-
-document.body.appendChild(component());
-```
-
-Needs mapping.
-
-Add mapping
-
-```
-new webpack.optimize.UglifyJsPlugin({
-  compress: { warnings: false },
-  output: { comments: false },
-  sourceMap: true
-})
-```
+Remove robots.js.
 
 ## Style Sheets - still linked
 
@@ -284,29 +293,42 @@ ${(uniq(ages))}
 `;
 ```
 
-```
+Create `styles.css`:
+
+```css
 .ages {
 	padding: 1rem;
 	background-color: #eee;
 }
 ```
 
-```
+```html
 <link rel="stylesheet" href="styles.css">
 ```
 
-```
-npm install style-loader css-loader --save-dev
+```sh
+$ npm install style-loader css-loader --save-dev
 ```
 
-```
-loaders: [
-...
+The css-loader takes a CSS file and reads off all its dependencies while the style-loader will embed those styles directly into the markup.
+
+```js
+    loaders: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      loader: 'babel-loader',
+      query: {
+        presets: [
+        ["es2015", { "modules": false }]
+        ]
+      }
+    },
     {
       test: /\.css$/, 
       loader: "style-loader!css-loader" 
     }
-]
+    ]
 ```
 
 In app.js
@@ -337,13 +359,19 @@ http://stackoverflow.com/questions/35369419/how-to-use-images-in-css-with-webpac
 }
 ```
 
+Webpack throws up.
+
 ```
 $ npm install url-loader --save-dev
 ```
 
+Note the complaint in terminal.
+
 ```
 $ npm install file-loader --save-dev
 ```
+
+Add to loaders array:
 
 ```
 {
@@ -352,11 +380,9 @@ $ npm install file-loader --save-dev
 }
 ```
 
-Note the base-64 encoded image
+Refresh the browser. Note the base-64 encoded image
 
-https://www.youtube.com/watch?v=WQue1AN93YU
-
-##Importing Exporting
+## Importing Exporting
 
 src/config.js
 
@@ -367,20 +393,24 @@ const apiKey = 'abcdef'
 export default apiKey
 ```
 
+app.js:
+
+```
 import apiKey from './src/config'
 console.log(apiKey)
+```
 
 Try:
 
-import foobar from './src/config'
+`import foobar from './src/config'`
 
-A default export gets renamed to whatever you import it as. A module  can have only one default export.
+A default export gets renamed to whatever you import it as. A module can have only one default export.
 
 2. Named exports
 
 Try:
 
-export const apiKey = 'abcdef'
+`export const apiKey = 'abcdef'`
 
 a. Change import:
 
@@ -388,33 +418,48 @@ import {apiKey} from './src/config'
 
 b. Multiple imports:
 
-export const url = 'http://deverell.com'
+`export const url = 'http://deverell.com'`
 
+```
 import {apiKey, url} from './src/config'
 console.log(apiKey, url)
+```
 
 c. Functions:
 
+```
 export function sayHi(name){
   console.log( `Hello there ${name}.` )
 }
+```
 
+```
 import {apiKey, url, sayHi} from './src/config'
-sayHi(Daniel
+sayHi('Daniel')
+```
 
 d. Multiple exports:
 
+```
 const a = 10
 const b = 30
 export {a, b}
+```
 
 e. Import/export as:
 
+```
 import {apiKey as key, url, sayHi} from './src/config'
 export {a as age, b}
+```
 
+`import {age} from './src/config'`
+
+`console.log(age)`
 
 ## Exercise ES6 Modules
+
+Named and default export
 
 src/user.js
 
@@ -428,27 +473,125 @@ function user(name, email, website){
 }
 ```
 
+Note If the property name and the variable that it is being set to are the same (ES6 object literals):
 
+```
+function User(name, email, website){
+  return { name, email, website }
+}
+```
 
+Add a function to create a url (slugify):
+
+```
+function createUrl(name){
+  // e.g. site.com:/users/daniel-deverell
+}
+```
+
+```
+$ npm install --save slug
+```
+
+In user.js
+
+```
+import slug from 'slug';
+```
+
+```
+import { url } from './config'
+...
+function createUrl(name){
+  return `${url}/users/${slug(name)}`
+}
+```
+
+Gravitar
+
+A universally accessible avatar which you can get if you know the user's email. The access point requires a base64 encoding of the email address. e.g.:
+
+```
+function gravitar(email){
+  // const photoUrl = 'https://www.gravatar.com/avatar/dfc49t8ycntc5cncg-c93'
+}
+```
+
+```
+$ sudo npm install base-64 --save
+```
+
+```
+import base64 from 'base-64'
+```
+
+```
+function gravitar(email){
+  const hash = base64.encode(email)
+  const photoUrl = `https://www.gravatar.com/avatar/${hash}`
+  return photoUrl
+}
+```
+
+Exporting 2 named exports and one default:
+
+```
+export default function User(name, email, website){
+  return { name, email, website }
+}
+export function createUrl(name){
+  return `${url}/users/${slug(name)}`
+}
+export function gravitar(email){
+  const hash = base64.encode(email)
+  const photoUrl = `https://www.gravatar.com/avatar/${hash}`
+  return photoUrl
+}
+```
+
+Use it in app.js.
+
+1: default:
+
+```
+import User from './src/user.js';
+```
+
+2: add named exports
+
+```
+import User, { createUrl, gravitar } from './src/user.js';
+```
+
+```
+const daniel = new User('Daniel Deverell', 'daniel.deverell@gmail.com', 'daniel.deverell.com')
+
+console.log(daniel)
+```
+
+```
+const profile = createUrl(daniel.name)
+console.log(profile)
+```
+
+```
+const image = gravatar(daniel.email)
+console.log(image)
+```
 
 
 ## SystemJS
 
+Browserify, rollup and systemjs are common alternatives to Webpack. Since you are writing ES6 modules (and not webpack etc) you are able to switch out for any other system. Webpack is popular among React developers. [SystemJS](https://github.com/systemjs/systemjs) is widely used in Angular 2.
+
+It uses jspm which allows it to be run in the browser without installing packages.
+
+Good to use when you want to use packages and modules but don't want to set everything up.
+
+Needs to run on a server:
+
 ```
-{
-  "name": "systemjs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "server": "browser-sync start --directory --server  --files '*.js, *.html, *.css'"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "browser-sync": "^2.13.0"
-  }
-}
+$ npm lite-server
 ```
 
 
@@ -469,16 +612,21 @@ function user(name, email, website){
 
 ```
 
+```
+System.config({ transpiler: 'babel' });
+System.import('./main.js');
+```
+
+In main.js:
+
+`console.log('Hello world')`
 
 ```
 import { sum, kebabCase } from 'npm:lodash';
-import { addTax } from './checkout';
-
 console.log(kebabCase('This is kebab case'));
-
-console.log(addTax(100, 0.15));
 ```
 
+Checkout:
 
 ```
 export function addTax(amount, taxRate) {
@@ -486,6 +634,10 @@ export function addTax(amount, taxRate) {
 }
 ```
 
+```
+import { addTax } from './checkout';
+console.log(addTax(100, 0.15));
+```
 
 
 
@@ -494,6 +646,8 @@ export function addTax(amount, taxRate) {
 
 
 
+### Notes
+https://css-tricks.com/css-modules-part-2-getting-started/
 
 
 
