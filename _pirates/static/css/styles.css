@@ -53,7 +53,7 @@ output {
   display: block;
   padding-top: 7px;
   font-size: 14px;
-  line-height: 1.428571429;
+  line-height: 1.42857;
   color: #555555; }
 
 .form-control {
@@ -62,7 +62,7 @@ output {
   height: 34px;
   padding: 6px 12px;
   font-size: 14px;
-  line-height: 1.428571429;
+  line-height: 1.42857;
   color: #555555;
   background-color: #fff;
   background-image: none;
@@ -249,7 +249,7 @@ select[multiple].input-sm {
   height: 46px;
   padding: 10px 16px;
   font-size: 18px;
-  line-height: 1.3333333;
+  line-height: 1.33333;
   border-radius: 6px; }
 
 select.input-lg {
@@ -264,7 +264,7 @@ select[multiple].input-lg {
   height: 46px;
   padding: 10px 16px;
   font-size: 18px;
-  line-height: 1.3333333;
+  line-height: 1.33333;
   border-radius: 6px; }
 
 .form-group-lg select.form-control {
@@ -280,7 +280,7 @@ select[multiple].input-lg {
   min-height: 38px;
   padding: 11px 16px;
   font-size: 18px;
-  line-height: 1.3333333; }
+  line-height: 1.33333; }
 
 .has-feedback {
   position: relative; }
@@ -608,3 +608,46 @@ li span {
   100% {
     opacity: 0;
     transform: translateX(-100%); } }
+
+label {
+  display: flex;
+  height: 2rem; }
+
+input {
+  width: 100%;
+  height: 1.6rem;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 1px solid #d9d9d9;
+  order: 1; }
+
+input:focus {
+  outline: none;
+  border-color: #404040; }
+
+.icon {
+  width: 1rem;
+  transition: all 0.5s;
+  stroke-dasharray: 0, 20;
+  stroke-dashoffset: -14.642; }
+
+.icon path {
+  stroke: black;
+  fill: none;
+  stroke-width: 1px; }
+
+input:focus + .icon {
+  stroke-dasharray: 28.284, 20;
+  stroke-dashoffset: 0; }
+
+.ng-valid.ng-not-empty {
+  border-color: #1daf8d; }
+
+.ng-invalid.ng-dirty {
+  border-color: #cc0000; }
+
+.line {
+  width: 100%;
+  stroke: black; }
+
+/*# sourceMappingURL=styles.css.map */

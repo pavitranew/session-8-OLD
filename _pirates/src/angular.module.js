@@ -45,7 +45,7 @@ angular.module('pirateApp').component('pirateDetail', {
 
         this.back = () => window.history.back(); 
 
-        this.editorEnabled = false;
+        this.editorEnabled = true;
 
         this.toggleEditor = () => this.editorEnabled = !this.editorEnabled;
 

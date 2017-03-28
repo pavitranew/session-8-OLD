@@ -7,8 +7,19 @@
 </ul>
 
 <form ng-submit="addPirate(pirate)">
-    <input type="text" ng-model="pirate.name" required placeholder="Name" />
-    <input type="text" ng-model="pirate.vessel" required placeholder="Vessel" />
-    <input type="text" ng-model="pirate.weapon" required placeholder="Weapon" />
-    <button type="submit">Add Pirate</button>
+
+	<label class="label">
+		<input ng-model="$ctrl.pirate.name" required ng-minlength="6" placeholder="Name" />
+		<svg viewBox="0 0 20 20" class="icon">
+			<path d="M0 0 L10 10 L0 20"></path>
+		</svg>
+		<svg class="line" viewbox="0, 0, 40, 2">
+			<path d="M0 1 L40 1" />
+		</svg>
+	</label>
+
+	<!-- <input type="text" ng-model="pirate.name" required placeholder="Name" /> -->
+	<input type="text" ng-model="pirate.vessel" required placeholder="Vessel" />
+	<input type="text" ng-model="pirate.weapon" required placeholder="Weapon" />
+	<button type="submit">Add Pirate</button>
 </form>

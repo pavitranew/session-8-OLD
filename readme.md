@@ -658,7 +658,25 @@ https://css-tricks.com/css-modules-part-2-getting-started/
 
 
 
+npm install node-sass --save-dev
 
+"build-sass": "node-sass --watch sass/styles.scss --output static/css/  --source-map true"
+
+npm install concurrently --save-dev
+
+"boom!": "concurrently \"npm run start\" \"npm run build\" \"npm run build-sass\" "
+
+
+```
+@import 'imports/mixins';
+@import 'imports/variables';
+@import 'imports/forms';
+@import 'imports/mystyles'; 
+
+* {
+  color: red !important;
+}
+```
 
 
 
