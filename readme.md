@@ -641,6 +641,133 @@ console.log(addTax(100, 0.15));
 
 
 
+## Pirates (continued)
+
+`npm install node-sass --save-dev`
+
+`"build-sass": "node-sass --watch sass/styles.scss --output static/css/  --source-map true"`
+
+`npm install concurrently --save-dev`
+
+`"boom!": "concurrently \"npm run start\" \"npm run build\" \"npm run build-sass\" "`
+
+```
+@import 'imports/mixins';
+@import 'imports/variables';
+@import 'imports/forms';
+@import 'imports/mystyles'; 
+
+* {
+  color: red !important;
+}
+```
+
+### Validation
+
+Note the classes Angular adds to the input fields as they are manipulated by the user.
+
+pirate-list.template.html
+
+```
+<label class="label">
+  <input ng-model="$ctrl.pirate.name" required ng-minlength="6" placeholder="Name" />
+  <svg viewBox="0 0 20 20" class="icon">
+    <path d="M0 0 L10 10 L0 20"></path>
+  </svg>
+</label>
+```
+
+Note the svg. Please watch this video from [frontend.center](https://www.youtube.com/watch?v=af4ZQJ14yu8)
+
+```
+label {
+  display: flex;
+  height: 2rem;
+}
+
+input {
+  width: 100%;
+  height: 1.6rem;
+  font-size: 1rem;
+  border: none;
+  border-bottom: 1px solid hsl(0%, 0%, 85%);
+  order: 1;
+}
+```
+
+
+```
+input:focus {
+  outline: none;
+  border-color: hsl(0%, 0%, 25%)
+}
+
+.icon {
+  width: 1rem;
+  opacity: 0;
+  transition: all 0.5s;
+  transform: translateX(-100%)
+  // stroke-dasharray: 0, 20;
+  // stroke-dashoffset: -14.642;
+}
+
+.icon path {
+  stroke: black;
+  fill: none;
+  stroke-width: 1px;
+}
+
+input:focus + .icon {
+  opacity: 1;
+  transform: translateX(0)
+  // stroke-dasharray: 28.284, 20;
+  // stroke-dashoffset: 0;
+}
+
+.ng-valid.ng-not-empty {
+  border-color: hsl(166, 72%, 40%)
+}
+
+.ng-invalid.ng-dirty {
+  border-color: hsl(0, 100%, 40%)
+}
+
+```
+
+Using the dash effect:
+
+```
+.icon {
+  width: 1rem;
+  // opacity: 0;
+  transition: all 0.5s;
+  // transform: translateX(-100%)
+  stroke-dasharray: 0, 20;
+  stroke-dashoffset: -14.642;
+}
+
+.icon path {
+  stroke: black;
+  fill: none;
+  stroke-width: 1px;
+}
+
+input:focus + .icon {
+  // opacity: 1;
+  // transform: translateX(0)
+  stroke-dasharray: 28.284, 20;
+  stroke-dashoffset: 0;
+}
+
+.ng-valid.ng-not-empty {
+  border-color: hsl(166, 72%, 40%)
+}
+
+.ng-invalid.ng-dirty {
+  border-color: hsl(0, 100%, 40%)
+}
+```
+
 
 
 
