@@ -538,7 +538,7 @@ import {apiKey as key, url, sayHi} from './src/config'
 ```
 
 
-## Exercise ES6 Modules
+## Optional Exercise - ES6 Modules
 
 Named and default export
 
@@ -741,16 +741,47 @@ Note the classes Angular adds to the input fields as they are manipulated by the
 
 static/partials/pirate-list.template.html
 
-```
-<label>
-  <input ng-model="$ctrl.pirate.name" required ng-minlength="6" placeholder="Name" />
-  <svg viewBox="0 0 20 20" class="icon">
-    <path d="M0 0 L10 10 L0 20"></path>
-  </svg>
-</label>
+Give the form a name:
+
+`<form ng-submit="addPirate(pirate)" name="addform">`
+
+Disable the submit button:
+
+`<button ng-disabled="addform.$invalid" type="submit">Add Pirate</button>`
+
+Note: you can visually identify the button as being disabled using Angular's added information e.g.
+
+```css
+button[disabled] {
+  background: gray;
+}
 ```
 
-Note the svg. Please watch this video from [frontend.center](https://www.youtube.com/watch?v=af4ZQJ14yu8)
+Give the input a name. Add a paragraph with ng-show conditions.
+
+```html
+<div class="form-group">
+  <label>
+    <input ng-model="$ctrl.pirate.name" required ng-minlength="6" placeholder="Name" name="pname" />
+    <svg viewBox="0 0 20 20" class="icon">
+      <path d="M0 0 L10 10 L0 20"></path>
+    </svg>
+  </label>
+  <p class="error" ng-show="addform.pname.$invalid && addform.pname.$touched">You must enter a name of at least 6 characters.</p>
+</div>
+```
+
+```css
+.error {
+    color: red;
+} 
+```
+
+Note the svg. 
+
+https://www.sitepoint.com/closer-look-svg-path-data/
+
+Please watch this video from [frontend.center](https://www.youtube.com/watch?v=af4ZQJ14yu8)
 
 ```
 label {
@@ -851,7 +882,7 @@ Note the final example that includes `ng-disabled` on the submit button.
 
 ### Notes
 https://css-tricks.com/css-modules-part-2-getting-started/
-
+https://github.com/mean-fall-2016/session-10
 
 
 
