@@ -2,21 +2,25 @@
 
 ## Homework
 
-* create a validation strategy for the Add Pirate form 
+* create a validation strategy for the Add Pirate form (ref. https://www.w3schools.com/angular/angular_validation.asp)
 
 ## Reading
 
 * [Wes Bos](http://wesbos.com/javascript-modules/) on ES6 Modules
-* http://exploringjs.com/es6/
+* http://exploringjs.com/es6/ (specifically http://exploringjs.com/es6/ch_modules.html)
 
 ## ES6 Modules
 
-app.js:
+In `_modules` create `app.js`:
 
 ```js
 const ages = [1,1,4,5,6,6,7];
 console.log(_.uniq(ages))
 ```
+
+Note the underscore. It uses [lodash's](https://lodash.com/) [uniq](https://lodash.com/docs/4.17.4#uniq) utility.
+
+Create `index.html`:
 
 ```html
 <!DOCTYPE html>
@@ -50,27 +54,44 @@ const ages = [1,1,4,5,6,6,7];
 console.log(uniq(ages))
 ```
 
-Remove lodash 
+Remove lodash script tag:
 
 ```
 <!-- <script src="https://unpkg.com/lodash@4.16.6"></script> -->
 ```
 
-"Unexpected token import"
+Browser errors: `Unexpected token import`
 
-Cannot use require. Require is part of Node: `const lodash = require('lodash');`
+Cannot use require. 
+
+Require is part of Node: `const lodash = require('lodash');`
 
 require is CommonJS. CommonJS is a project with the goal of specifying an ecosystem for JavaScript outside the browser (for example, on the server or for native desktop applications) like NodeJS. 
 
 https://webpack.github.io/docs/commonjs.html
 
-## Grunt and Gulp
+We want to be able to use and create ES6 modules in our code (without node).
 
-Task runners that perform many functions such as starting a server, SASS compiling, minification, concatenation.
+## Aside: Grunt and Gulp
 
-See a sample from a previous semester - `gulp`
+In a previous exercise we had this kind of situation:
 
-We have been using npm scripts for this so far.
+```
+<script src="https://code.angularjs.org/1.6.2/angular.min.js"></script>
+<script src="https://code.angularjs.org/1.6.2/angular-route.min.js"></script>
+<script src="js/foodapp.module.js"></script>
+<script src="js/foodapp.config.js"></script>
+<script src="js/recipes/recipe-list.component.js"></script>
+<script src="js/recipes/recipe-detail.component.js"></script>
+```
+
+Grunt and Gulp are task runners that perform many functions such as starting a server, SASS compiling, minification, and concatenation.
+
+Demo: a simple sample from a previous semester using `gulp`
+
+N.B. Demo does not include [concatenation and minification](http://stackoverflow.com/questions/21961142/gulp-concat-scripts-in-order)
+
+We have been using npm scripts for most of this so far.
 
 [Pros and cons of this approach](https://gist.github.com/elijahmanor/179e47828bf760c218bb3820d929836d)
 
@@ -141,6 +162,8 @@ function component () {
 document.body.appendChild(component());
 ```
 
+Refresh. Not working. 
+
 Re-run webpack at prompt.
 
 Note the import of a single piece of functionality.
@@ -159,7 +182,13 @@ module.exports = {
 };
 ```
 
-alt 
+If a config file is present webpack picks it up automatically:
+
+```
+$ ./node_modules/.bin/webpack 
+```
+
+Let's try an alternate config:
 
 ```
 module.exports = {
@@ -172,14 +201,7 @@ module.exports = {
 };
 ```
 
-
-If a config file is present webpack picks it up automatically:
-
-```
-$ ./node_modules/.bin/webpack 
-```
-
-npm run webpack with a --watch flag:
+and npm run webpack with a --watch flag:
 
 ```
 {
@@ -199,21 +221,39 @@ Run it with a -p flag
 },
 ```
 
-app.js:
+Edit index.html to point to the new directory.
+
+Delete the old `dist` directory.
+
+Test in the browser.
+
+Add to app.js:
 
 ```
 console.log(uniq(ages))
 ```
 
-Note the line number (1) in the minified file.
+Note that Webpack reruns.
+
+Note the line number (1) in the console (minified file).
 
 Add source mapping:
 
 ```
-devtool: 'source-map',
+module.exports = {
+  devtool: 'source-map',
+  entry: {
+    filename: './app.js'
+  },
+  output: {
+    filename: '_build/bundle.js'
+  }
+};
 ```
 
-Note the new line number.
+Stop the npm process and rerun it.
+
+Note the new line number and location in the console.
 
 We now have the ability to import code from our node_modules - similar to using require in the commonjs-based node environment.
 
@@ -249,7 +289,11 @@ module: {
 }
 ```
 
-N.B. We can also include `include: __dirname + '/src',`
+https://www.npmjs.com/package/babel-preset-es2015-native-modules
+
+N.B. We can also use include: `include: __dirname + '/src',`
+
+===== > DON'T USE THIS. IT DOESN'T Babelize!
 
 Alternative:
 
@@ -261,7 +305,13 @@ Alternative:
 },
 ```
 
-Test
+====== > 
+
+Test.
+
+Test with new files to check Babel (make sure the `-p` flag is off).
+
+robot.js:
 
 ```
 const greetings = (text, person) => {
@@ -270,6 +320,8 @@ const greetings = (text, person) => {
 
 export default greetings;
 ```
+
+app.js
 
 ```
 import greetings from './robot.js'
@@ -281,11 +333,13 @@ function component(){
 
 To view the Babelized JavaScript remove the -p flag, recompile, open bundle.js and search for `greetings`. 
 
-Remove robots.js.
+Remove robots.js and references to it in app.js
 
 ## Style Sheets - still linked
 
 https://webpack.github.io/docs/stylesheets.html
+
+Use a template string in app.js:
 
 ```
 element.innerHTML = `
@@ -303,6 +357,8 @@ Create `styles.css`:
 	background-color: #eee;
 }
 ```
+
+Check:
 
 ```html
 <link rel="stylesheet" href="styles.css">
@@ -336,18 +392,23 @@ The css-loader takes a CSS file and reads off all its dependencies while the sty
 In app.js
 
 ```
-require('./styles.css');
+// require('./styles.css');
+import styles from './styles.css'
 ```
 
-N.B. We just made a stylesheet a dependency of a JavaScript file!
-
-Note that styles are added to the page
+Remove the link tag from index.html:
 
 ```
 <!-- <link rel="stylesheet" href="styles.css"> -->
 ```
 
-We made a JavaScript file that requested another CSS file and that code was then embedded within a web page. So in a more realistic example we could create a buttons.js file and make buttons.css a dependency of it, and then import that JavaScript into another file that organises our templates and spits out some HTML. 
+Note that styles are added to the page
+
+We just made a stylesheet a dependency of a JavaScript file!
+
+We made a JavaScript file that requested another CSS file and that code was then embedded within a web page. So in a more realistic example we could create a buttons.js file and make buttons.css a dependency of it, and then import that JavaScript into another file that organises our templates and spits out HTML. 
+
+This is the basis for Angular 2 and React components. 
 
 ## Images
 
@@ -361,7 +422,7 @@ http://stackoverflow.com/questions/35369419/how-to-use-images-in-css-with-webpac
 }
 ```
 
-Webpack throws up.
+Test. Webpack throws up.
 
 ```
 $ npm install url-loader --save-dev
@@ -373,7 +434,7 @@ Note the complaint in terminal.
 $ npm install file-loader --save-dev
 ```
 
-Add to loaders array:
+Add to loaders array in webpack config:
 
 ```
 {
@@ -404,7 +465,10 @@ console.log(apiKey)
 
 Try:
 
-`import foobar from './src/config'`
+```
+import foobar from './src/config'
+console.log(foobar)
+```
 
 A default export gets renamed to whatever you import it as. A module can have only one default export.
 
@@ -414,9 +478,16 @@ Try:
 
 `export const apiKey = 'abcdef'`
 
+Test: `undefined`
+
 a. Change import:
 
+```
 import {apiKey} from './src/config'
+console.log(apiKey)
+```
+
+{ apiKey } represents a named export.
 
 b. Multiple imports:
 
@@ -450,14 +521,22 @@ export {a, b}
 
 e. Import/export as:
 
+e.1 export as
+
 ```
-import {apiKey as key, url, sayHi} from './src/config'
 export {a as age, b}
 ```
 
 `import {age} from './src/config'`
 
 `console.log(age)`
+
+e.2 import as
+
+```
+import {apiKey as key, url, sayHi} from './src/config'
+```
+
 
 ## Exercise ES6 Modules
 
@@ -492,39 +571,29 @@ function createUrl(name){
 ```
 
 ```
-$ npm install --save slug
+$ npm install --save slug base-64
 ```
 
 In user.js
 
 ```
 import slug from 'slug';
+import base64 from 'base-64'
+import { url } from './config'
 ```
 
 ```
-import { url } from './config'
-...
 function createUrl(name){
   return `${url}/users/${slug(name)}`
 }
 ```
 
-Gravitar
-
-A universally accessible avatar which you can get if you know the user's email. The access point requires a base64 encoding of the email address. e.g.:
+Gravitar - A universally accessible avatar which you can get if you know the user's email. The access point requires a base64 encoding of the email address. e.g.:
 
 ```
 function gravitar(email){
   // const photoUrl = 'https://www.gravatar.com/avatar/dfc49t8ycntc5cncg-c93'
 }
-```
-
-```
-$ sudo npm install base-64 --save
-```
-
-```
-import base64 from 'base-64'
 ```
 
 ```
@@ -577,25 +646,28 @@ console.log(profile)
 ```
 
 ```
-const image = gravatar(daniel.email)
+const image = gravitar(daniel.email)
 console.log(image)
 ```
 
 
 ## SystemJS
 
-Browserify, rollup and systemjs are common alternatives to Webpack. Since you are writing ES6 modules (and not webpack etc) you are able to switch out for any other system. Webpack is popular among React developers. [SystemJS](https://github.com/systemjs/systemjs) is widely used in Angular 2.
+Browserify, rollup and systemjs are common alternatives to Webpack. Since you are writing ES6 modules (and not webpack etc) you are free to use any other system. Webpack is popular among React developers. [SystemJS](https://github.com/systemjs/systemjs) is widely used in Angular 2.
 
-It uses jspm which allows it to be run in the browser without installing packages.
+SystemJS uses jspm which allows it to be run in the browser without installing packages.
 
-Good to use when you want to use packages and modules but don't want to set everything up.
+This makes it good to use when you want to use packages and modules but don't want to set everything up.
+
+cd to systemjs directory.
 
 Needs to run on a server:
 
 ```
-$ npm lite-server
+$ lite-server
 ```
 
+Note index.html:
 
 ```
 <!DOCTYPE html>
@@ -607,34 +679,33 @@ $ npm lite-server
 <body>
   <script src="https://jspm.io/system@0.19.js"></script>
   <script>
-
+    System.config({ transpiler: 'babel' });
+    System.import('./main.js');
   </script>
 </body>
 </html>
-
 ```
 
-```
-System.config({ transpiler: 'babel' });
-System.import('./main.js');
-```
-
-In main.js:
+Create main.js:
 
 `console.log('Hello world')`
+
+Test.
 
 ```
 import { sum, kebabCase } from 'npm:lodash';
 console.log(kebabCase('This is kebab case'));
 ```
 
-Checkout:
+Note checkout.js:
 
 ```
 export function addTax(amount, taxRate) {
   return amount + (amount * taxRate);
 }
 ```
+
+In main.js
 
 ```
 import { addTax } from './checkout';
@@ -645,11 +716,11 @@ console.log(addTax(100, 0.15));
 
 ## Pirates (continued)
 
-`npm install node-sass --save-dev`
+`npm install`
+
+`npm install node-sass concurrently --save-dev`
 
 `"build-sass": "node-sass --watch sass/styles.scss --output static/css/  --source-map true"`
-
-`npm install concurrently --save-dev`
 
 `"boom!": "concurrently \"npm run start\" \"npm run build\" \"npm run build-sass\" "`
 
@@ -657,7 +728,7 @@ console.log(addTax(100, 0.15));
 @import 'imports/mixins';
 @import 'imports/variables';
 @import 'imports/forms';
-@import 'imports/mystyles'; 
+@import 'imports/mystyles';
 
 * {
   color: red !important;
@@ -668,10 +739,10 @@ console.log(addTax(100, 0.15));
 
 Note the classes Angular adds to the input fields as they are manipulated by the user.
 
-pirate-list.template.html
+static/partials/pirate-list.template.html
 
 ```
-<label class="label">
+<label>
   <input ng-model="$ctrl.pirate.name" required ng-minlength="6" placeholder="Name" />
   <svg viewBox="0 0 20 20" class="icon">
     <path d="M0 0 L10 10 L0 20"></path>

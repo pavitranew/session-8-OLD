@@ -23,15 +23,12 @@ gulp.task('sass', function(){
 });
 
 gulp.task('serve', ['sass'], function(){
-
 	browserSync.init({
 		server: './app'
 	})
-
 	gulp.watch(sassSources, ['sass'])
 	gulp.watch(htmlSource).on('change', browserSync.reload);
 });
-
 
 gulp.task('default', ['serve']);
 
