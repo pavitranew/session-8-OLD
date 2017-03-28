@@ -22,7 +22,17 @@ exports.add = function (req, res) {
 	})
 };
 
-exports.update = function () { };
+exports.update = function (req, res) {
+    const id = req.params.id;
+    const updates = req.body;
+
+    Pirate.update({ '_id': id }, updates,
+        function (err) {
+            if (err) return console.log(err);
+            return res.sendStatus(202);
+        });
+};
+
 
 exports.delete = function (req, res) {
     const id = req.params.id;
