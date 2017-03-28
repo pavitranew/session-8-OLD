@@ -2,7 +2,11 @@
 
 ## Homework
 
+* If you haven't completed the update pirate functionality yet, please do so
+
 * create a validation strategy for the Add Pirate form (ref. https://www.w3schools.com/angular/angular_validation.asp)
+
+* Using the _pirates directory as a model, integrate a build solution using Babel and Webpack into your assignment.
 
 ## Reading
 
