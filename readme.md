@@ -2,6 +2,8 @@
 
 ## Homework
 
+* create a validation strategy for the Add Pirate form 
+
 ## Reading
 
 * [Wes Bos](http://wesbos.com/javascript-modules/) on ES6 Modules
@@ -769,6 +771,9 @@ input:focus + .icon {
 ```
 
 
+See https://www.w3schools.com/angular/angular_validation.asp for a complete set of examples for Angular validation.
+
+Note the final example that includes `ng-disabled` on the submit button.
 
 
 
