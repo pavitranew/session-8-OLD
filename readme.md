@@ -720,6 +720,35 @@ console.log(addTax(100, 0.15));
 
 ## Pirates (continued)
 
+Update pirate.
+
+angular.module:
+
+```
+this.savePirate = (pirate, pid) => {
+    $http.put('/api/pirates/' + pid, pirate)
+    .then((res) => this.editorEnabled = false )
+}
+```
+
+pirate.controller
+
+```
+exports.update = function (req, res) {
+    const id = req.params.id;
+    const updates = req.body;
+
+    Pirate.update({ '_id': id }, updates,
+        function (err) {
+            if (err) return console.log(err);
+            return res.sendStatus(202);
+        });
+};
+```
+
+
+### Validation
+
 `npm install`
 
 `npm install node-sass concurrently --save-dev`
@@ -738,8 +767,6 @@ console.log(addTax(100, 0.15));
   color: red !important;
 }
 ```
-
-### Validation
 
 Note the classes Angular adds to the input fields as they are manipulated by the user.
 
