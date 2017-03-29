@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "webpack --watch -p"
+    "build": "webpack --watch"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +13,13 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-latest": "^6.24.0",
+    "css-loader": "^0.27.3",
+    "file-loader": "^0.10.1",
+    "style-loader": "^0.16.1",
+    "url-loader": "^0.5.8",
     "webpack": "^2.3.2"
   }
 }

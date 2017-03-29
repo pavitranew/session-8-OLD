@@ -63,14 +63,14 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(4);
+__webpack_require__(5);
 module.exports = 'ngAnimate';
 
 
@@ -78,7 +78,7 @@ module.exports = 'ngAnimate';
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(5);
+__webpack_require__(6);
 module.exports = 'ngRoute';
 
 
@@ -86,7 +86,7 @@ module.exports = 'ngRoute';
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(6);
+__webpack_require__(7);
 module.exports = angular;
 
 
@@ -95,19 +95,19 @@ module.exports = angular;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony default export */ var _unused_webpack_default_export = angular.module('pirateApp', ['ngAnimate', 'ngRoute']);
+/* unused harmony default export */ var _unused_webpack_default_export = (angular.module('pirateApp', ['ngAnimate', 'ngRoute']));
 
 angular.module('pirateApp')
-    .config(function config($locationProvider, $routeProvider) {
+.config(function config($locationProvider, $routeProvider) {
     $routeProvider.
-      when('/', {
-          template: '<pirate-list></pirate-list>'
-      }).
-      when('/pirates/:pirateId', {
-          template: '<pirate-detail></pirate-detail>'
-      }).
-      otherwise('/');
-    }
+    when('/', {
+      template: '<pirate-list></pirate-list>'
+  }).
+    when('/pirates/:pirateId', {
+      template: '<pirate-detail></pirate-detail>'
+  }).
+    otherwise('/');
+}
 );
 
 angular.module('pirateApp').component('pirateList', {
@@ -137,20 +137,54 @@ angular.module('pirateApp').component('pirateList', {
 angular.module('pirateApp').component('pirateDetail', {
     templateUrl: './partials/pirate-detail.template.html',
     controller:  function PirateDetailController($http, $routeParams) {
-    $http.get('/api/pirates/' + $routeParams.pirateId)
-    .then((response) => this.pirate = response.data);
+        $http.get('/api/pirates/' + $routeParams.pirateId)
+        .then((response) => this.pirate = response.data);
 
-    this.back = () => window.history.back(); 
+        this.back = () => window.history.back(); 
 
-    this.editorEnabled = false;
+        this.editorEnabled = false;
 
-    this.toggleEditor = () => this.editorEnabled = !this.editorEnabled;
-} 
+        this.toggleEditor = () => this.editorEnabled = !this.editorEnabled;
+
+        this.savePirate = (pirate, pid) => {
+            $http.put('/api/pirates/' + pid, pirate)
+            .then((res) => this.editorEnabled = false )
+        }
+    } 
 })
+
+
+
+
+
+
+
 
 
 /***/ }),
 /* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular_animate__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular_animate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_angular_animate__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular_route__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular_route___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angular_route__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_angular_module__ = __webpack_require__(3);
+
+
+
+
+
+
+
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 /**
@@ -4311,7 +4345,7 @@ angular.module('ngAnimate', [], function initAngularHelpers() {
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 /**
@@ -5546,7 +5580,7 @@ function ngViewFillContentFactory($compile, $controller, $route) {
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 /**
@@ -38894,28 +38928,6 @@ $provide.value("$locale", {
 })(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-
-/***/ }),
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular_animate__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular_animate___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_angular_animate__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular_route__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular_route___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angular_route__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__src_angular_module__ = __webpack_require__(3);
-
-
-
-
-
-
-
-
 
 /***/ })
 /******/ ]);
